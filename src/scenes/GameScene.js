@@ -20,12 +20,15 @@ class GameScene extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         this.enemies = [];
         this.coins = [];
+        this.healthItems = [];
+        this.boss = null;
 
         // Create level
         this.createPlatforms();
         this.createPlayer();
         this.createEnemies();
         this.createCoins();
+        this.createBoss();
         this.createGoal();
 
         // Setup collisions
@@ -108,10 +111,33 @@ class GameScene extends Phaser.Scene {
     }
 
     createCoins() {
+        // For boss level (level 4), create health items instead of coins
+        const isBossLevel = this.levelData.boss !== undefined;
+
         this.levelData.coins.forEach(coinData => {
-            const coin = new Coin(this, coinData.x, coinData.y);
-            this.coins.push(coin);
+            if (isBossLevel) {
+                // Create health item for boss level
+                const healthItem = new HealthItem(this, coinData.x, coinData.y);
+                this.healthItems.push(healthItem);
+            } else {
+                // Create normal coin for other levels
+                const coin = new Coin(this, coinData.x, coinData.y);
+                this.coins.push(coin);
+            }
         });
+    }
+
+    createBoss() {
+        // Only create boss if level has boss data
+        if (this.levelData.boss) {
+            const bossData = this.levelData.boss;
+            this.boss = new Boss(this, bossData.x, bossData.y);
+
+            // Hide goal initially for boss levels
+            this.goalHidden = true;
+
+            console.log('Boss spawned at level', window.gameState.currentLevel);
+        }
     }
 
     createGoal() {
@@ -123,6 +149,12 @@ class GameScene extends Phaser.Scene {
         // Make the goal hitbox slightly larger for easier collision detection
         this.goal.setSize(40, 60);
         this.goal.setOrigin(0.5, 0.5);
+
+        // Hide goal initially if this is a boss level
+        if (this.levelData.boss) {
+            this.goal.setAlpha(0);
+            this.goal.body.enable = false;
+        }
 
         // Goal animation
         this.tweens.add({
@@ -167,6 +199,17 @@ class GameScene extends Phaser.Scene {
             );
         });
 
+        // Player and health items
+        this.healthItems.forEach(healthItem => {
+            this.physics.add.overlap(
+                this.player.getSprite(),
+                healthItem.getSprite(),
+                () => healthItem.collect(),
+                null,
+                this
+            );
+        });
+
         // Player and goal
         this.physics.add.overlap(
             this.player.getSprite(),
@@ -175,6 +218,21 @@ class GameScene extends Phaser.Scene {
             null,
             this
         );
+
+        // Boss collisions
+        if (this.boss) {
+            // Boss and platforms
+            this.physics.add.collider(this.boss.getSprite(), this.platforms);
+
+            // Boss and player
+            this.physics.add.overlap(
+                this.player.getSprite(),
+                this.boss.getSprite(),
+                () => this.boss.onCollideWithPlayer(this.player),
+                null,
+                this
+            );
+        }
     }
 
     createUI() {
@@ -257,6 +315,11 @@ class GameScene extends Phaser.Scene {
         // Update enemies
         this.enemies.forEach(enemy => enemy.update());
 
+        // Update boss
+        if (this.boss && this.boss.isAlive) {
+            this.boss.update();
+        }
+
         // Update UI
         this.updateUI();
     }
@@ -264,8 +327,49 @@ class GameScene extends Phaser.Scene {
     updateUI() {
         this.scoreText.setText('Score: ' + window.gameState.score);
 
-        // Update hearts based on lives
-        const hearts = '♥'.repeat(window.gameState.lives) + '♡'.repeat(3 - window.gameState.lives);
+        // Check for life recovery based on score
+        if (window.gameState.score >= window.gameState.nextLifeAt) {
+            if (window.gameState.lives < window.gameState.maxLives) {
+                window.gameState.lives++;
+                window.gameState.nextLifeAt += 100; // Next life at +100 points
+
+                // Show life gained message
+                const lifeText = this.add.text(
+                    this.cameras.main.width / 2,
+                    this.cameras.main.height / 2 - 50,
+                    '💖 LIFE UP! 💖',
+                    {
+                        fontSize: '36px',
+                        fill: '#ff69b4',
+                        fontStyle: 'bold',
+                        stroke: '#000000',
+                        strokeThickness: 5
+                    }
+                );
+                lifeText.setOrigin(0.5);
+                lifeText.setScrollFactor(0);
+                lifeText.setDepth(1000);
+
+                this.tweens.add({
+                    targets: lifeText,
+                    y: lifeText.y - 50,
+                    alpha: 0,
+                    scaleX: 1.5,
+                    scaleY: 1.5,
+                    duration: 2000,
+                    ease: 'Power2',
+                    onComplete: () => lifeText.destroy()
+                });
+
+                console.log('Life gained! Lives:', window.gameState.lives);
+            } else {
+                // Max lives reached, just update nextLifeAt
+                window.gameState.nextLifeAt += 100;
+            }
+        }
+
+        // Update hearts based on lives (show up to maxLives)
+        const hearts = '♥'.repeat(window.gameState.lives) + '♡'.repeat(Math.max(0, window.gameState.maxLives - window.gameState.lives));
         this.livesText.setText(hearts);
 
         this.levelText.setText('LEVEL ' + window.gameState.currentLevel);
@@ -284,6 +388,12 @@ class GameScene extends Phaser.Scene {
         this.goalReached = true;
 
         console.log('Goal reached!');
+
+        // Level clear bonus: Restore 1 life
+        if (window.gameState.lives < window.gameState.maxLives) {
+            window.gameState.lives++;
+            console.log('Level clear bonus! Life restored. Lives:', window.gameState.lives);
+        }
 
         // Check if there's a next level
         if (window.gameState.currentLevel < window.gameState.maxLevel) {

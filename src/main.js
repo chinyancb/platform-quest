@@ -22,5 +22,7 @@ window.gameState = {
     score: 0,
     lives: 3,
     currentLevel: 1,
-    maxLevel: 2
+    maxLevel: 4,
+    maxLives: 5, // Maximum lives allowed
+    nextLifeAt: 100 // Score needed for next life
 };
