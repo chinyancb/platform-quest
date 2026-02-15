@@ -21,6 +21,8 @@ class PreloadScene extends Phaser.Scene {
         this.createCoinGraphic();
         this.createPlatformGraphic();
         this.createGoalGraphic();
+        this.createBossGraphic();
+        this.createHeartGraphic();
     }
 
     createPlayerGraphic() {
@@ -171,6 +173,91 @@ class PreloadScene extends Phaser.Scene {
         graphics.fillCircle(4, 2, 3);
 
         graphics.generateTexture('goal', 40, 60);
+        graphics.destroy();
+    }
+
+    createBossGraphic() {
+        const graphics = this.add.graphics();
+
+        // Main body - large dark red
+        graphics.fillStyle(0x8b0000, 1);
+        graphics.fillRoundedRect(4, 4, 56, 56, 6);
+
+        // Armor plates
+        graphics.fillStyle(0x4a0000, 1);
+        graphics.fillRoundedRect(8, 12, 20, 16, 3);
+        graphics.fillRoundedRect(36, 12, 20, 16, 3);
+        graphics.fillRoundedRect(20, 36, 24, 20, 3);
+
+        // Spikes on shoulders
+        graphics.fillStyle(0x666666, 1);
+        graphics.beginPath();
+        graphics.moveTo(8, 12);
+        graphics.lineTo(12, 4);
+        graphics.lineTo(16, 12);
+        graphics.closePath();
+        graphics.fillPath();
+
+        graphics.beginPath();
+        graphics.moveTo(48, 12);
+        graphics.lineTo(52, 4);
+        graphics.lineTo(56, 12);
+        graphics.closePath();
+        graphics.fillPath();
+
+        // Glowing eyes
+        graphics.fillStyle(0xff0000, 1);
+        graphics.fillCircle(20, 24, 4);
+        graphics.fillCircle(44, 24, 4);
+
+        // Eye glow
+        graphics.fillStyle(0xff6666, 0.5);
+        graphics.fillCircle(20, 24, 6);
+        graphics.fillCircle(44, 24, 6);
+
+        // Menacing mouth
+        graphics.lineStyle(3, 0xff0000, 1);
+        graphics.lineBetween(18, 42, 26, 46);
+        graphics.lineBetween(26, 46, 32, 44);
+        graphics.lineBetween(32, 44, 38, 46);
+        graphics.lineBetween(38, 46, 46, 42);
+
+        // Outline
+        graphics.lineStyle(3, 0x000000, 1);
+        graphics.strokeRoundedRect(4, 4, 56, 56, 6);
+
+        graphics.generateTexture('boss', 64, 64);
+        graphics.destroy();
+    }
+
+    createHeartGraphic() {
+        const graphics = this.add.graphics();
+
+        // Simple heart shape using circles and triangle
+        graphics.fillStyle(0xff1744, 1); // Red heart
+
+        // Left circle
+        graphics.fillCircle(8, 8, 6);
+        // Right circle
+        graphics.fillCircle(16, 8, 6);
+
+        // Bottom triangle
+        graphics.beginPath();
+        graphics.moveTo(2, 8);
+        graphics.lineTo(12, 20);
+        graphics.lineTo(22, 8);
+        graphics.closePath();
+        graphics.fillPath();
+
+        // Add highlight
+        graphics.fillStyle(0xff6b9d, 0.6);
+        graphics.fillCircle(8, 7, 3);
+
+        // Add shine
+        graphics.fillStyle(0xffffff, 0.8);
+        graphics.fillCircle(7, 6, 1.5);
+
+        graphics.generateTexture('heart', 24, 24);
         graphics.destroy();
     }
 
