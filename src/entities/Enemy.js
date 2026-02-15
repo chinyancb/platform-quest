@@ -71,6 +71,7 @@ class Enemy {
 
         // Add score
         window.gameState.score += 50;
+        if (window.soundManager) window.soundManager.play('enemyDefeat');
 
         // Create defeat particles
         this.createDefeatParticles();

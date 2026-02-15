@@ -8,6 +8,11 @@ class MenuScene extends Phaser.Scene {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
 
+        // Start menu BGM
+        if (window.soundManager) {
+            window.soundManager.playBGM('menu');
+        }
+
         // Gradient background
         const graphics = this.add.graphics();
         graphics.fillGradientStyle(0x1a237e, 0x1a237e, 0x4a148c, 0x4a148c, 1);

@@ -45,6 +45,7 @@ class HealthItem {
         // Restore life
         if (window.gameState.lives < window.gameState.maxLives) {
             window.gameState.lives++;
+            if (window.soundManager) window.soundManager.play('heal');
 
             // Show life restored message
             const healText = this.scene.add.text(this.sprite.x, this.sprite.y - 30, '💖 +1 LIFE!', {
