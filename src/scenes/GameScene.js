@@ -40,6 +40,15 @@ class GameScene extends Phaser.Scene {
         // Camera setup
         this.cameras.main.setBounds(0, 0, 800, 600);
         this.cameras.main.startFollow(this.player.getSprite(), true, 0.1, 0.1);
+
+        // Start appropriate BGM
+        if (window.soundManager) {
+            if (this.boss) {
+                window.soundManager.playBGM('boss');
+            } else {
+                window.soundManager.playBGM('game');
+            }
+        }
     }
 
     createBackground() {
@@ -387,6 +396,7 @@ class GameScene extends Phaser.Scene {
         if (this.goalReached) return;
         this.goalReached = true;
 
+        if (window.soundManager) window.soundManager.play('goal');
         console.log('Goal reached!');
 
         // Level clear bonus: Restore 1 life
@@ -398,6 +408,7 @@ class GameScene extends Phaser.Scene {
         // Check if there's a next level
         if (window.gameState.currentLevel < window.gameState.maxLevel) {
             window.gameState.currentLevel++;
+            if (window.soundManager) window.soundManager.play('levelComplete');
 
             // Show level complete message
             const width = this.cameras.main.width;

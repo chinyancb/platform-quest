@@ -308,6 +308,7 @@ class Boss {
         if (this.isInvulnerable || !this.isAlive) return;
 
         this.health--;
+        if (window.soundManager) window.soundManager.play('bossHit');
         console.log('Boss hit! Health:', this.health);
 
         this.updateHealthBar();
@@ -424,6 +425,7 @@ class Boss {
 
         // Add big score
         window.gameState.score += 500;
+        if (window.soundManager) window.soundManager.play('bossDefeat');
 
         console.log('Boss defeated! Score:', window.gameState.score);
 
@@ -579,6 +581,7 @@ class Boss {
                     onComplete: () => blockedText.destroy()
                 });
 
+                if (window.soundManager) window.soundManager.play('bossInvulnerable');
                 console.log('Boss is BLUE = invulnerable! Wait for RED!');
             } else {
                 // Deal damage

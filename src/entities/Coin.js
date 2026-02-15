@@ -42,6 +42,7 @@ class Coin {
 
         // Add score
         window.gameState.score += this.value;
+        if (window.soundManager) window.soundManager.play('coin');
         console.log('Coin collected! Score:', window.gameState.score);
 
         // Create sparkle particles

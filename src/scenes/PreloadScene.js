@@ -28,25 +28,58 @@ class PreloadScene extends Phaser.Scene {
     createPlayerGraphic() {
         const graphics = this.add.graphics();
 
-        // Body - gradient blue with darker outline
-        graphics.fillStyle(0x2980b9, 1);
-        graphics.fillRoundedRect(2, 2, 28, 28, 4);
+        // ウサギのデザイン - 元気なウサギの戦士
 
-        // Lighter blue highlight
-        graphics.fillStyle(0x5dade2, 1);
-        graphics.fillRoundedRect(4, 4, 12, 12, 2);
+        // 体（白）
+        graphics.fillStyle(0xf0f0f0, 1);
+        graphics.fillRect(6, 12, 20, 16);
 
-        // Eyes
-        graphics.fillStyle(0xffffff, 1);
-        graphics.fillCircle(10, 12, 3);
-        graphics.fillCircle(22, 12, 3);
+        // 頭
+        graphics.fillStyle(0xf0f0f0, 1);
+        graphics.beginPath();
+        graphics.arc(16, 12, 9, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 長い耳
+        graphics.fillStyle(0xf0f0f0, 1);
+        graphics.fillRect(10, 0, 4, 12);
+        graphics.fillRect(18, 0, 4, 12);
+
+        // 耳の内側（ピンク）
+        graphics.fillStyle(0xffccdd, 1);
+        graphics.fillRect(11, 2, 2, 8);
+        graphics.fillRect(19, 2, 2, 8);
+
+        // 目
         graphics.fillStyle(0x000000, 1);
-        graphics.fillCircle(11, 12, 2);
-        graphics.fillCircle(23, 12, 2);
+        graphics.beginPath();
+        graphics.arc(12, 12, 2, 0, Math.PI * 2);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.arc(20, 12, 2, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Outline
-        graphics.lineStyle(2, 0x1a5276, 1);
-        graphics.strokeRoundedRect(2, 2, 28, 28, 4);
+        // 鼻
+        graphics.fillStyle(0xff99cc, 1);
+        graphics.beginPath();
+        graphics.arc(16, 15, 1.5, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 前歯
+        graphics.fillStyle(0xffffff, 1);
+        graphics.fillRect(14, 16, 2, 3);
+        graphics.fillRect(16, 16, 2, 3);
+
+        // 足
+        graphics.fillStyle(0xf0f0f0, 1);
+        graphics.fillRect(8, 24, 6, 6);
+        graphics.fillRect(18, 24, 6, 6);
+
+        // 尻尾（ふわふわ）
+        graphics.fillStyle(0xf0f0f0, 1);
+        graphics.beginPath();
+        graphics.arc(26, 22, 3, 0, Math.PI * 2);
+        graphics.fill();
 
         graphics.generateTexture('player', 32, 32);
         graphics.destroy();
@@ -55,30 +88,72 @@ class PreloadScene extends Phaser.Scene {
     createEnemyGraphic() {
         const graphics = this.add.graphics();
 
-        // Body - gradient red
-        graphics.fillStyle(0xc0392b, 1);
-        graphics.fillRoundedRect(2, 2, 28, 28, 4);
+        // オオカミのデザイン - 凶暴な森のオオカミ
 
-        // Darker red bottom
-        graphics.fillStyle(0x922b21, 1);
-        graphics.fillRoundedRect(2, 20, 28, 10, 4);
+        // 体（灰色）
+        graphics.fillStyle(0x666666, 1);
+        graphics.fillRect(6, 12, 20, 14);
 
-        // Angry eyes
-        graphics.fillStyle(0xffffff, 1);
-        graphics.fillCircle(10, 12, 3);
-        graphics.fillCircle(22, 12, 3);
+        // 頭
+        graphics.fillStyle(0x666666, 1);
+        graphics.beginPath();
+        graphics.arc(16, 12, 9, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 耳（三角、尖った）
+        graphics.fillStyle(0x666666, 1);
+        graphics.beginPath();
+        graphics.moveTo(10, 6);
+        graphics.lineTo(8, 0);
+        graphics.lineTo(12, 4);
+        graphics.fill();
+
+        graphics.beginPath();
+        graphics.moveTo(22, 6);
+        graphics.lineTo(20, 4);
+        graphics.lineTo(24, 0);
+        graphics.fill();
+
+        // 鼻（長め）
+        graphics.fillStyle(0x888888, 1);
+        graphics.fillRect(12, 14, 8, 6);
         graphics.fillStyle(0x000000, 1);
-        graphics.fillCircle(10, 11, 2);
-        graphics.fillCircle(22, 11, 2);
+        graphics.beginPath();
+        graphics.arc(16, 19, 2, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Angry eyebrows
-        graphics.lineStyle(2, 0x000000, 1);
-        graphics.lineBetween(6, 8, 12, 10);
-        graphics.lineBetween(18, 10, 24, 8);
+        // 目（赤く光る）
+        graphics.fillStyle(0xff0000, 1);
+        graphics.beginPath();
+        graphics.arc(12, 11, 2.5, 0, Math.PI * 2);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.arc(20, 11, 2.5, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Outline
-        graphics.lineStyle(2, 0x7b241c, 1);
-        graphics.strokeRoundedRect(2, 2, 28, 28, 4);
+        // 牙
+        graphics.fillStyle(0xffffff, 1);
+        graphics.beginPath();
+        graphics.moveTo(12, 19);
+        graphics.lineTo(10, 23);
+        graphics.lineTo(13, 20);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.moveTo(20, 19);
+        graphics.lineTo(19, 20);
+        graphics.lineTo(22, 23);
+        graphics.fill();
+
+        // しっぽ
+        graphics.fillStyle(0x666666, 1);
+        graphics.beginPath();
+        graphics.arc(26, 20, 4, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 足
+        graphics.fillStyle(0x555555, 1);
+        graphics.fillRect(8, 24, 5, 6);
+        graphics.fillRect(19, 24, 5, 6);
 
         graphics.generateTexture('enemy', 32, 32);
         graphics.destroy();
@@ -179,52 +254,100 @@ class PreloadScene extends Phaser.Scene {
     createBossGraphic() {
         const graphics = this.add.graphics();
 
-        // Main body - large dark red
-        graphics.fillStyle(0x8b0000, 1);
-        graphics.fillRoundedRect(4, 4, 56, 56, 6);
+        // クマキングのデザイン - 王冠を被った巨大なクマ
 
-        // Armor plates
-        graphics.fillStyle(0x4a0000, 1);
-        graphics.fillRoundedRect(8, 12, 20, 16, 3);
-        graphics.fillRoundedRect(36, 12, 20, 16, 3);
-        graphics.fillRoundedRect(20, 36, 24, 20, 3);
+        // 体（茶色、大きい）
+        graphics.fillStyle(0x8b4513, 1);
+        graphics.fillRect(12, 28, 40, 32);
 
-        // Spikes on shoulders
-        graphics.fillStyle(0x666666, 1);
+        // 頭
+        graphics.fillStyle(0x8b4513, 1);
         graphics.beginPath();
-        graphics.moveTo(8, 12);
-        graphics.lineTo(12, 4);
-        graphics.lineTo(16, 12);
-        graphics.closePath();
-        graphics.fillPath();
+        graphics.arc(32, 20, 18, 0, Math.PI * 2);
+        graphics.fill();
 
+        // 耳（丸い）
+        graphics.fillStyle(0x8b4513, 1);
         graphics.beginPath();
-        graphics.moveTo(48, 12);
-        graphics.lineTo(52, 4);
-        graphics.lineTo(56, 12);
-        graphics.closePath();
-        graphics.fillPath();
+        graphics.arc(18, 8, 8, 0, Math.PI * 2);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.arc(46, 8, 8, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Glowing eyes
+        // 耳の内側
+        graphics.fillStyle(0xd2691e, 1);
+        graphics.beginPath();
+        graphics.arc(18, 8, 4, 0, Math.PI * 2);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.arc(46, 8, 4, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 王冠（金色）
+        graphics.fillStyle(0xffd700, 1);
+        graphics.fillRect(20, 2, 24, 6);
+        // 王冠の飾り
+        graphics.fillRect(22, 0, 4, 3);
+        graphics.fillRect(30, 0, 4, 3);
+        graphics.fillRect(38, 0, 4, 3);
+
+        // 宝石（赤）
         graphics.fillStyle(0xff0000, 1);
-        graphics.fillCircle(20, 24, 4);
-        graphics.fillCircle(44, 24, 4);
+        graphics.beginPath();
+        graphics.arc(32, 5, 2, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Eye glow
-        graphics.fillStyle(0xff6666, 0.5);
-        graphics.fillCircle(20, 24, 6);
-        graphics.fillCircle(44, 24, 6);
+        // 顔の明るい部分
+        graphics.fillStyle(0xd2691e, 1);
+        graphics.beginPath();
+        graphics.arc(32, 24, 12, 0, Math.PI);
+        graphics.fill();
 
-        // Menacing mouth
-        graphics.lineStyle(3, 0xff0000, 1);
-        graphics.lineBetween(18, 42, 26, 46);
-        graphics.lineBetween(26, 46, 32, 44);
-        graphics.lineBetween(32, 44, 38, 46);
-        graphics.lineBetween(38, 46, 46, 42);
+        // 目（威厳のある）
+        graphics.fillStyle(0x000000, 1);
+        graphics.beginPath();
+        graphics.arc(24, 20, 3, 0, Math.PI * 2);
+        graphics.fill();
+        graphics.beginPath();
+        graphics.arc(40, 20, 3, 0, Math.PI * 2);
+        graphics.fill();
 
-        // Outline
-        graphics.lineStyle(3, 0x000000, 1);
-        graphics.strokeRoundedRect(4, 4, 56, 56, 6);
+        // 眉毛（怒った顔）
+        graphics.lineStyle(2, 0x000000, 1);
+        graphics.beginPath();
+        graphics.moveTo(20, 17);
+        graphics.lineTo(26, 18);
+        graphics.stroke();
+        graphics.beginPath();
+        graphics.moveTo(38, 18);
+        graphics.lineTo(44, 17);
+        graphics.stroke();
+
+        // 鼻
+        graphics.fillStyle(0x000000, 1);
+        graphics.beginPath();
+        graphics.arc(32, 26, 4, 0, Math.PI * 2);
+        graphics.fill();
+
+        // 腕（太い）
+        graphics.fillStyle(0x8b4513, 1);
+        graphics.fillRect(6, 32, 8, 20);
+        graphics.fillRect(50, 32, 8, 20);
+
+        // 爪
+        graphics.fillStyle(0xffffff, 1);
+        for (let i = 0; i < 3; i++) {
+            graphics.fillRect(6 + i * 2, 50, 2, 4);
+            graphics.fillRect(50 + i * 2, 50, 2, 4);
+        }
+
+        // 傷跡（戦いの証）
+        graphics.lineStyle(1.5, 0x654321, 1);
+        graphics.beginPath();
+        graphics.moveTo(38, 22);
+        graphics.lineTo(42, 26);
+        graphics.stroke();
 
         graphics.generateTexture('boss', 64, 64);
         graphics.destroy();
@@ -262,6 +385,12 @@ class PreloadScene extends Phaser.Scene {
     }
 
     create() {
+        // Initialize global sound manager
+        if (!window.soundManager) {
+            window.soundManager = new SoundManager(this);
+            console.log('Sound system initialized');
+        }
+
         // Move to menu scene
         this.scene.start('MenuScene');
     }

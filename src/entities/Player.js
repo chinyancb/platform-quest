@@ -22,6 +22,7 @@ class Player {
         this.isInvincible = false;
         this.isWallSliding = false;
         this.isDashing = false;
+        this.wasDashing = false; // Track dash state for sound
         this.canWallJump = true;
 
         // Setup controls
@@ -49,6 +50,12 @@ class Player {
 
         // Check if dash key is pressed
         this.isDashing = this.dashKey.isDown;
+
+        // Play dash sound when starting to dash
+        if (this.isDashing && !this.wasDashing && window.soundManager) {
+            window.soundManager.play('dash');
+        }
+        this.wasDashing = this.isDashing;
 
         // Update speed and jump velocity based on dash state
         if (this.isDashing) {
@@ -105,12 +112,14 @@ class Player {
                 sprite.setVelocityX(this.wallJumpVelocityX);
                 sprite.setVelocityY(this.wallJumpVelocityY);
                 this.createJumpEffect();
+                if (window.soundManager) window.soundManager.play('wallJump');
                 console.log('Wall jump right!');
             } else if (onRightWall) {
                 // Jump to the left
                 sprite.setVelocityX(-this.wallJumpVelocityX);
                 sprite.setVelocityY(this.wallJumpVelocityY);
                 this.createJumpEffect();
+                if (window.soundManager) window.soundManager.play('wallJump');
                 console.log('Wall jump left!');
             }
         }
@@ -118,6 +127,7 @@ class Player {
         else if (jumpKeyJustPressed && body.touching.down) {
             sprite.setVelocityY(this.jumpVelocity);
             this.createJumpEffect();
+            if (window.soundManager) window.soundManager.play('jump');
             if (this.isDashing) {
                 this.createDashJumpEffect();
                 console.log('Dash jump!');
@@ -144,6 +154,7 @@ class Player {
         if (this.isInvincible || !this.isAlive) return;
 
         window.gameState.lives--;
+        if (window.soundManager) window.soundManager.play('damage');
         console.log('Player hit! Lives remaining:', window.gameState.lives);
 
         if (window.gameState.lives <= 0) {

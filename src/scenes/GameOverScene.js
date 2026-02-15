@@ -12,6 +12,16 @@ class GameOverScene extends Phaser.Scene {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
 
+        // Stop BGM and play appropriate sound
+        if (window.soundManager) {
+            window.soundManager.stopBGM();
+            if (this.won) {
+                window.soundManager.play('levelComplete');
+            } else {
+                window.soundManager.play('gameOver');
+            }
+        }
+
         // Background
         const graphics = this.add.graphics();
         if (this.won) {
