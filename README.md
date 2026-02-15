@@ -60,7 +60,7 @@ A polished 2D platformer game built with Phaser.js, featuring smooth animations,
 ## Project Structure
 
 ```
-claude_pj/
+platform-quest/
 ├── index.html              # Main HTML file
 ├── src/
 │   ├── main.js             # Game configuration and initialization
